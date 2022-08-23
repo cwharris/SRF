@@ -15,30 +15,23 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_glog version)
+function(find_and_configure_nlohmann_json version)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
-  rapids_cpm_find(glog ${version}
+  rapids_cpm_find(nlohmann_json ${version}
     GLOBAL_TARGETS
-      glog glog::glog
+      nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY          https://github.com/google/glog.git
+      GIT_REPOSITORY          https://github.com/nlohmann/json.git
       GIT_TAG                 v${version}
       GIT_SHALLOW             TRUE
-      OPTIONS                 "WITH_CUSTOM_PREFIX ON"
-                              "WITH_PKGCONFIG OFF"
-                              "BUILD_TESTING OFF"
   )
-
-  if(TARGET glog AND NOT TARGET glog::glog)
-    add_library(glog::glog ALIAS glog)
-  endif()
 
 endfunction()
 
-find_and_configure_glog(${GLOG_VERSION})
+find_and_configure_nlohmann_json(${JSON_VERSION})

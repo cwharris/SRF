@@ -30,19 +30,65 @@ function(find_and_configure_boost_true_cmake version)
 
   rapids_cpm_find(Boost ${version}
     GLOBAL_TARGETS
-      Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
+       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system Boost::core boost_fiber boost_context
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/boostorg/boost.git
-      GIT_TAG                 v${version}
+      GIT_TAG                 "boost-${version}"
       GIT_SHALLOW             TRUE
-      GIT_SUBMODULES          ""
+      GIT_SUBMODULES          "libs/algorithm"
+                              "libs/align"
+                              "libs/array"
+                              "libs/assert"
+                              "libs/atomic"
+                              "libs/bind"
+                              "libs/concept_check"
+                              "libs/config"
+                              "libs/container_hash"
+                              "libs/context"
+                              "libs/conversion"
+                              "libs/core"
+                              "libs/detail"
+                              "libs/exception"
+                              "libs/fiber"
+                              "libs/filesystem"
+                              "libs/unordered"
+                              "libs/format"
+                              "libs/function_types"
+                              "libs/function"
+                              "libs/fusion"
+                              "libs/integer"
+                              "libs/intrusive"
+                              "libs/io"
+                              "libs/iterator"
+                              "libs/move"
+                              "libs/mp11"
+                              "libs/mpl"
+                              "libs/optional"
+                              "libs/pool"
+                              "libs/predef"
+                              "libs/preprocessor"
+                              "libs/range"
+                              "libs/regex"
+                              "libs/smart_ptr"
+                              "libs/static_assert"
+                              "libs/system"
+                              "libs/throw_exception"
+                              "libs/tuple"
+                              "libs/type_index"
+                              "libs/type_traits"
+                              "libs/typeof"
+                              "libs/utility"
+                              "libs/variant2"
+                              "libs/winapi"
+                              "tools/cmake"
       OPTIONS                 "BUILD_TESTING OFF"
       FIND_PACKAGE_ARGUMENTS  "COMPONENTS context fiber filesystem system"
   )
+
 endfunction()
 
 # This function uses boost-cmake (https://github.com/Orphis/boost-cmake) to
@@ -80,4 +126,4 @@ function(find_and_configure_boost_boost_cmake version)
   endif()
 endfunction()
 
-find_and_configure_boost_boost_cmake(${BOOST_VERSION})
+find_and_configure_boost_true_cmake(${BOOST_VERSION})

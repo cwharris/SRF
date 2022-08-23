@@ -69,6 +69,7 @@ std::shared_ptr<Topology> Topology::Create(const TopologyOptions& options)
     {
         // process cpu_set
         CHECK_HWLOC(hwloc_get_cpubind(system_topology, &cpu_set.bitmap(), HWLOC_CPUBIND_PROCESS));
+        VLOG(1) << "process cpuset: " << cpu_set;
     }
     else
     {

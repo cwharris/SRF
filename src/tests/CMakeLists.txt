@@ -44,6 +44,7 @@ add_executable(test_srf_private
   pipelines/multi_segment.cpp
   pipelines/single_segment.cpp
   segments/common_segments.cpp
+  test_doca.cpp
   test_main.cpp
   test_memory.cpp
   test_network.cpp
@@ -67,6 +68,13 @@ target_link_libraries(test_srf_private
   ucx::ucs
   ucx::ucp
   pthread
+  -L/home/charris/dev/doca-testing/dpdk-doca-gpu/install/lib/x86_64-linux-gnu
+  -L/home/charris/dev/doca-testing/doca/install/lib/x86_64-linux-gnu
+  libdoca_common.so
+  libdoca_flow.so
+  libdoca_gpu.so
+  libdoca_argp.so
+  librte_eal.so
 )
 
 # Necessary include to prevent IWYU from showing absolute paths
@@ -74,6 +82,7 @@ target_include_directories(test_srf_private
   PRIVATE
   ${SRF_ROOT_DIR}/src
   copy_fixture_files
+  /usr/include
 )
 
 add_test(

@@ -6,11 +6,11 @@ channels:
 dependencies:
   - autoconf>=2.69
   - benchmark=1.6.0
-  - boost-cpp=1.74
+  - boost-cpp=1.80
   - ccache
   - cmake=3.22
-  - cuda-nvml-dev=11.4
-  - cudatoolkit=11.4
+  - cuda-nvml-dev=11.6
+  - cudatoolkit=11.6
   - cython=0.29.24
   - doxygen=1.9.2
   - flatbuffers=2.0
@@ -33,7 +33,7 @@ dependencies:
   - nlohmann_json=3.9
   - numactl-libs-cos7-x86_64
   - numpy=1.21.2
-  - nvcc_linux-64=11.4
+  - nvcc_linux-64=11.6
   - pip
   - pkg-config=0.29
   - pybind11-stubgen=0.10

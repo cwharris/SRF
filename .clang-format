@@ -99,7 +99,7 @@ IncludeCategories:
     Priority:        6
 # IncludeIsMainSourceRegex: '$?'
 IncludeIsMainRegex: '([-_](test|unittest))?$'
-IndentCaseBlocks: false
+#IndentCaseBlocks: false
 IndentCaseLabels: false
 IndentPPDirectives: BeforeHash
 IndentWidth:     4

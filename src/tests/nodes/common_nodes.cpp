@@ -37,6 +37,8 @@
 #include <utility>
 #include <vector>
 
+#include <doca_version.h>
+
 using namespace srf;
 using namespace srf::memory::literals;
 

@@ -281,12 +281,20 @@ target_link_libraries(libsrf
   prometheus-cpp::core # private in MR !199
   ucx::ucs
   ucx::ucp
+  -L/home/charris/dev/doca-testing/dpdk-doca-gpu/install/lib/x86_64-linux-gnu
+  -L/home/charris/dev/doca-testing/doca/install/lib/x86_64-linux-gnu
+  doca_common.so
+  doca_flow.so
+  doca_gpu.so
+  doca_argp.so
 )
 
 target_include_directories(libsrf
   PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
+  /home/charris/dev/doca-testing/dpdk-doca-gpu/install/include
+  /home/charris/dev/doca-testing/doca/install/include
   PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
