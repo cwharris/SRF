@@ -58,6 +58,8 @@ function(protobuf_generate_grpc_cpp target)
 
   set(out_files)
 
+  message(FATAL_ERROR "Protobuf_IMPORT_DIRS: ${Protobuf_IMPORT_DIRS}")
+
   # Generate the cpp files
   protobuf_generate(
     LANGUAGE cpp

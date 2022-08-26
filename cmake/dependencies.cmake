@@ -47,6 +47,7 @@ message(VERBOSE "CMAKE_SYSROOT: " ${CMAKE_SYSROOT})
 message(VERBOSE "CMAKE_STAGING_PREFIX: " ${CMAKE_STAGING_PREFIX})
 message(VERBOSE "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE: " ${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE})
 
+find_package(Protobuf REQUIRED)
 
 # Start with CUDA. Need to add it to our export set
 rapids_find_package(CUDAToolkit
@@ -69,7 +70,6 @@ include(deps/Configure_ucx)
 
 # hwloc
 # =====
-set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
 include(deps/Configure_hwloc)
 
 # FlatBuffers
@@ -87,23 +87,9 @@ include(deps/Configure_hwloc)
 set(RMM_VERSION "\${SRF_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use. Defaults to \${SRF_RAPIDS_VERSION}")
 include(deps/Configure_RMM)
 
-# gflags
-# ======
-rapids_find_package(gflags REQUIRED
-  GLOBAL_TARGETS gflags
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  # FIND_ARGS
-  #   CONFIG
-)
-
 # glog
 # ====
-# - link against shared
-# - todo: compile with -DWITH_GFLAGS=OFF and remove gflags dependency
-set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
 include(deps/Configure_glog)
-
 
 # nvidia cub
 # ==========
@@ -114,14 +100,8 @@ find_path(CUB_INCLUDE_DIRS "cub/cub.cuh"
 
 # grpc-repo
 # =========
-rapids_find_package(gRPC REQUIRED
-  GLOBAL_TARGETS
-    gRPC::address_sorting gRPC::gpr gRPC::grpc gRPC::grpc_unsecure gRPC::grpc++ gRPC::grpc++_alts gRPC::grpc++_error_details gRPC::grpc++_reflection
-    gRPC::grpc++_unsecure gRPC::grpc_plugin_support gRPC::grpcpp_channelz gRPC::upb gRPC::grpc_cpp_plugin gRPC::grpc_csharp_plugin gRPC::grpc_node_plugin
-    gRPC::grpc_objective_c_plugin gRPC::grpc_php_plugin gRPC::grpc_python_plugin gRPC::grpc_ruby_plugin
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-)
+include(deps/Configure_abseil)
+include(deps/Configure_gRPC)
 
 # RxCpp
 # =====
@@ -130,13 +110,7 @@ include(deps/Configure_rxcpp)
 
 # JSON
 # ======
-rapids_find_package(nlohmann_json REQUIRED
-  GLOBAL_TARGETS nlohmann_json::nlohmann_json
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  FIND_ARGS
-    CONFIG
-)
+include(deps/Configure_nlohmann_json)
 
 # prometheus
 # =========

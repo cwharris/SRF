@@ -17,7 +17,7 @@
 
 find_package(CUDAToolkit)
 
-function(find_and_configure_hwloc version)
+function(find_and_configure_hwloc VERSION GIT_TAG)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "hwloc")
 
@@ -61,7 +61,7 @@ function(find_and_configure_hwloc version)
   else()
 
     # Try to find hwloc and download from source if not found
-    rapids_cpm_find(hwloc ${version}
+    rapids_cpm_find(hwloc ${VERSION}
       GLOBAL_TARGETS
         hwloc hwloc::hwloc
       BUILD_EXPORT_SET
@@ -70,7 +70,7 @@ function(find_and_configure_hwloc version)
         ${PROJECT_NAME}-core-exports
       CPM_ARGS
         GIT_REPOSITORY          https://github.com/open-mpi/hwloc.git
-        GIT_TAG                 "hwloc-${version}"
+        GIT_TAG                 "${GIT_TAG}"
         DOWNLOAD_ONLY           TRUE
         FIND_PACKAGE_ARGUMENTS  "EXACT"
     )
@@ -158,4 +158,4 @@ function(find_and_configure_hwloc version)
 
 endfunction()
 
-find_and_configure_hwloc(${HWLOC_VERSION})
+find_and_configure_hwloc("2.5" "hwloc-2.5.0")

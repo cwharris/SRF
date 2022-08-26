@@ -15,12 +15,12 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_ucx version)
+function(find_and_configure_ucx VERSION GIT_TAG)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "ucx")
 
   # Try to find UCX and download from source if not found
-  rapids_cpm_find(ucx 1.12
+  rapids_cpm_find(ucx ${VERSION}
     GLOBAL_TARGETS
       ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
     BUILD_EXPORT_SET
@@ -29,7 +29,7 @@ function(find_and_configure_ucx version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/openucx/ucx.git
-      GIT_TAG                 "v${version}"
+      GIT_TAG                 "${GIT_TAG}"
       DOWNLOAD_ONLY           TRUE
   )
 
@@ -82,7 +82,7 @@ function(find_and_configure_ucx version)
       # The io_demo fails to build in out of source builds. So remove that from
       # the Makefile (wish we could just disable all test/examples/apps) as a
       # part of the download command
-      PATCH_COMMAND     git checkout -- . && git apply --whitespace=fix ${PROJECT_SOURCE_DIR}/cmake/deps/patches/ucx.patch
+    #   PATCH_COMMAND     git checkout -- . && git apply --whitespace=fix ${PROJECT_SOURCE_DIR}/cmake/deps/patches/ucx.patch
       # Note, we set SED and GREP here since they can be hard coded in the conda libtoolize
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env SED=sed GREP=grep <SOURCE_DIR>/autogen.sh
                 COMMAND <SOURCE_DIR>/contrib/configure-release ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX} --enable-mt --without-rdmacm --disable-gtest --disable-examples
@@ -179,4 +179,4 @@ function(find_and_configure_ucx version)
 
 endfunction()
 
-find_and_configure_ucx(${UCX_VERSION})
+find_and_configure_ucx("1.12" "v1.12.1")
