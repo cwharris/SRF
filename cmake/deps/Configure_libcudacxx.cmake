@@ -35,4 +35,4 @@ function(find_and_configure_libcudacxx version)
 
 endfunction()
 
-find_and_configure_libcudacxx(${LIBCUDACXX_VERSION})
+find_and_configure_libcudacxx("1.8.0")

@@ -15,40 +15,36 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_rmm version)
+function(find_and_configure_gflags version)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "gflags")
 
-  include(cpm/rmm)
-
-  # Does not work with cudf currently. Once updated to include rmm::Thrust to the GLOBAL_TARGETS. This should be used
-  # rapids_cpm_rmm(
-  #     BUILD_EXPORT_SET    ${PROJECT_NAME}-core-exports
-  #     INSTALL_EXPORT_SET  ${PROJECT_NAME}-core-exports
-  # )
-
-  # Allow setting version to a variable. If so, evaluate that here. Allows for dependent versions, i.e. RMM_VERSION=${SRF_RAPIDS_VERSION}
-  if ("${version}" MATCHES [=[^\${(.+)}$]=])
-    set(version "${${CMAKE_MATCH_1}}")
-  endif()
-
-  rapids_cpm_find(rmm ${version}
+  rapids_cpm_find(gflags ${version}
     GLOBAL_TARGETS
-      rmm::rmm rmm::Thrust
+      gflags
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
-      GIT_TAG         branch-${version}
+      GIT_REPOSITORY  https://github.com/gflags/gflags
+      GIT_TAG         v${version}
       GIT_SHALLOW     TRUE
-      OPTIONS         "BUILD_TESTS OFF"
+      OPTIONS         "BUILD_TESTING OFF"
                       "BUILD_BENCHMARKS OFF"
-                      "CUDA_STATIC_RUNTIME OFF"
                       "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
+                      "GFLAGS_NAMESPACE gflags"
+                      "BUILD_gflags_nothreads_LIB ON"
+                      "BUILD_STATIC_LIBS ON"
+                      "INSTALL_STATIC_LIBS ON"
   )
+
+  if(glog_ADDED)
+
+    
+
+  endif()
 
 endfunction()
 
-find_and_configure_rmm(${SRF_RAPIDS_VERSION})
+find_and_configure_gflags("2.2.1")

@@ -18,7 +18,6 @@ list(APPEND CMAKE_MESSAGE_CONTEXT "dep")
 # Initialize rapids CPM with package overrides
 rapids_cpm_init(OVERRIDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps/rapids_cpm_package_overrides.json")
 
-
 # Print CMake settings when verbose output is enabled
 message(VERBOSE "PROJECT_NAME: " ${PROJECT_NAME})
 message(VERBOSE "CMAKE_HOST_SYSTEM: ${CMAKE_HOST_SYSTEM}")
@@ -48,6 +47,8 @@ message(VERBOSE "CMAKE_STAGING_PREFIX: " ${CMAKE_STAGING_PREFIX})
 message(VERBOSE "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE: " ${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE})
 
 
+find_package(Protobuf REQUIRED)
+
 # Start with CUDA. Need to add it to our export set
 rapids_find_package(CUDAToolkit
   REQUIRED
@@ -55,22 +56,12 @@ rapids_find_package(CUDAToolkit
   INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
 )
 
-# Boost
-# =====
-# - Use static linking to avoid issues with system-wide installations of Boost.
-# - Use numa=on to ensure the numa component of fiber gets built
-set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
-include(deps/Configure_boost)
-
-# UCX
-# ===
-set(UCX_VERSION "1.12" CACHE STRING "Version of ucx to use")
-include(deps/Configure_ucx)
-
-# hwloc
-# =====
-set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
-include(deps/Configure_hwloc)
+# nvidia cub
+# ==========
+find_path(CUB_INCLUDE_DIRS "cub/cub.cuh"
+  HINTS ${CUDAToolkit_INCLUDE_DIRS} ${Thrust_SOURCE_DIR} ${CUB_DIR}
+  REQUIRE
+)
 
 # FlatBuffers
 # ===========
@@ -81,71 +72,17 @@ include(deps/Configure_hwloc)
 #  FIND_ARGS
 #  CONFIG
 #)
-
-# NVIDIA RAPIDS RMM
-# =================
-set(RMM_VERSION "\${SRF_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use. Defaults to \${SRF_RAPIDS_VERSION}")
+include(deps/Configure_abseil)
+include(deps/Configure_boost)
+include(deps/Configure_ucx)
+include(deps/Configure_hwloc)
 include(deps/Configure_RMM)
-
-# gflags
-# ======
-rapids_find_package(gflags REQUIRED
-  GLOBAL_TARGETS gflags
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  # FIND_ARGS
-  #   CONFIG
-)
-
-# glog
-# ====
-# - link against shared
-# - todo: compile with -DWITH_GFLAGS=OFF and remove gflags dependency
-set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
+include(deps/Configure_gflags)
 include(deps/Configure_glog)
-
-
-# nvidia cub
-# ==========
-find_path(CUB_INCLUDE_DIRS "cub/cub.cuh"
-  HINTS ${CUDAToolkit_INCLUDE_DIRS} ${Thrust_SOURCE_DIR} ${CUB_DIR}
-  REQUIRE
-)
-
-# grpc-repo
-# =========
-rapids_find_package(gRPC REQUIRED
-  GLOBAL_TARGETS
-    gRPC::address_sorting gRPC::gpr gRPC::grpc gRPC::grpc_unsecure gRPC::grpc++ gRPC::grpc++_alts gRPC::grpc++_error_details gRPC::grpc++_reflection
-    gRPC::grpc++_unsecure gRPC::grpc_plugin_support gRPC::grpcpp_channelz gRPC::upb gRPC::grpc_cpp_plugin gRPC::grpc_csharp_plugin gRPC::grpc_node_plugin
-    gRPC::grpc_objective_c_plugin gRPC::grpc_php_plugin gRPC::grpc_python_plugin gRPC::grpc_ruby_plugin
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-)
-
-# RxCpp
-# =====
-set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
+include(deps/Configure_gRPC)
 include(deps/Configure_rxcpp)
-
-# JSON
-# ======
-rapids_find_package(nlohmann_json REQUIRED
-  GLOBAL_TARGETS nlohmann_json::nlohmann_json
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  FIND_ARGS
-    CONFIG
-)
-
-# prometheus
-# =========
-set(PROMETHEUS_CPP_VERSION "1.0.0" CACHE STRING "Version of Prometheus-cpp to use")
+include(deps/Configure_nlohmann_json)
 include(deps/Configure_prometheus)
-
-# libcudacxx
-# =========
-set(LIBCUDACXX_VERSION "1.8.0" CACHE STRING "Version of libcudacxx to use")
 include(deps/Configure_libcudacxx)
 
 if(SRF_BUILD_BENCHMARKS)

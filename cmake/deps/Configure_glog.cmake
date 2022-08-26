@@ -33,8 +33,13 @@ function(find_and_configure_glog version)
       OPTIONS                 "WITH_CUSTOM_PREFIX ON"
                               "WITH_PKGCONFIG OFF"
                               "BUILD_TESTING OFF"
+                              "WITH_GFLAGS OFF"
   )
+
+  if(TARGET glog AND NOT TARGET glog::glog)
+    add_library(glog::glog ALIAS glog)
+  endif()
 
 endfunction()
 
-find_and_configure_glog(${GLOG_VERSION})
+find_and_configure_glog("0.6.0")

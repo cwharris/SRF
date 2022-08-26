@@ -13,7 +13,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
+
+if(POLICY CMP0126)
+    # message(FATAL_ERROR "OOPS")
+    cmake_policy(SET CMP0126 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0126 NEW)
+endif()
+
+if(POLICY CMP0102)
+    cmake_policy(SET CMP0102 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0102 NEW)
+endif()
+
+# gflags?
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
+endif()
+
+# mess things up?
+if(POLICY CMP0066)
+    cmake_policy(SET CMP0066 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0066 NEW)
+endif()
+
+# mess things up?
+if(POLICY CMP0067)
+    cmake_policy(SET CMP0067 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0067 NEW)
+endif()
+
+# robert
+if(POLICY CMP0077)
+    cmake_policy(SET CMP0077 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+endif()
+
+#
+if(POLICY CMP0056)
+    cmake_policy(SET CMP0056 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0056 NEW)
+endif()
 
 list(APPEND CMAKE_MESSAGE_CONTEXT "srf")
 
@@ -303,9 +344,9 @@ set_target_properties(libsrf PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/l
 
 # ##################################################################################################
 # - install targets -------------------------------------------------------------------------------
-rapids_cmake_install_lib_dir(lib_dir)
 include(CPack)
 include(GNUInstallDirs)
+rapids_cmake_install_lib_dir(lib_dir)
 
 install(
   TARGETS libsrf

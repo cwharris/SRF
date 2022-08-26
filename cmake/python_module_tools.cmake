@@ -33,8 +33,6 @@ message(VERBOSE "Python3_EXECUTABLE (before find_package): ${Python3_EXECUTABLE}
 message(VERBOSE "Python3_ROOT_DIR (before find_package): ${Python3_ROOT_DIR}")
 message(VERBOSE "FIND_PYTHON_STRATEGY (before find_package): ${FIND_PYTHON_STRATEGY}")
 
-find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
-
 message(VERBOSE "Python3_FOUND: " ${Python3_FOUND})
 message(VERBOSE "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
 message(VERBOSE "Python3_INTERPRETER_ID: " ${Python3_INTERPRETER_ID})
@@ -50,6 +48,8 @@ message(VERBOSE "Python3_VERSION: " ${Python3_VERSION})
 message(VERBOSE "Python3_NumPy_FOUND: " ${Python3_NumPy_FOUND})
 message(VERBOSE "Python3_NumPy_INCLUDE_DIRS: " ${Python3_NumPy_INCLUDE_DIRS})
 message(VERBOSE "Python3_NumPy_VERSION: " ${Python3_NumPy_VERSION})
+
+find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
 
 # After finding python, now find pybind11
 

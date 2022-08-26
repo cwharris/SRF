@@ -158,4 +158,4 @@ function(find_and_configure_hwloc version)
 
 endfunction()
 
-find_and_configure_hwloc(${HWLOC_VERSION})
+find_and_configure_hwloc("2.5.0")

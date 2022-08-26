@@ -15,40 +15,48 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_rmm version)
+function(find_and_configure_protobuf VERSION)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "protobuf")
 
-  include(cpm/rmm)
-
-  # Does not work with cudf currently. Once updated to include rmm::Thrust to the GLOBAL_TARGETS. This should be used
-  # rapids_cpm_rmm(
-  #     BUILD_EXPORT_SET    ${PROJECT_NAME}-core-exports
-  #     INSTALL_EXPORT_SET  ${PROJECT_NAME}-core-exports
-  # )
-
-  # Allow setting version to a variable. If so, evaluate that here. Allows for dependent versions, i.e. RMM_VERSION=${SRF_RAPIDS_VERSION}
-  if ("${version}" MATCHES [=[^\${(.+)}$]=])
-    set(version "${${CMAKE_MATCH_1}}")
-  endif()
-
-  rapids_cpm_find(rmm ${version}
+  rapids_cpm_find(protobuf ${VERSION}
     GLOBAL_TARGETS
-      rmm::rmm rmm::Thrust
+      grpc
+      grpc_cpp_plugin
+      address_sorting
+    #   gRPC::gpr
+    #   gRPC::grpc_csharp_plugin
+    #   gRPC::grpc_node_plugin
+    #   gRPC::grpc_objective_c_plugin
+    #   gRPC::grpc_php_plugin
+    #   gRPC::grpc_plugin_support
+    #   gRPC::grpc_python_plugin
+    #   gRPC::grpc_ruby_plugin
+    #   gRPC::grpc_unsecure
+    #   gRPC::grpc++
+    #   gRPC::grpc++_alts
+    #   gRPC::grpc++_error_details
+    #   gRPC::grpc++_reflection
+    #   gRPC::grpc++_unsecure
+    #   gRPC::grpcpp_channelz
+    #   gRPC::upb
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
-      GIT_TAG         branch-${version}
+      GIT_REPOSITORY  https://github.com/protocolbuffers/protobuf
+      GIT_TAG         v${VERSION}
       GIT_SHALLOW     TRUE
       OPTIONS         "BUILD_TESTS OFF"
                       "BUILD_BENCHMARKS OFF"
-                      "CUDA_STATIC_RUNTIME OFF"
+                      "CUDA_STATIC_RUNTIME ON"
                       "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
+                      "protobuf_INSTALL ON"
+    
+    
   )
 
 endfunction()
 
-find_and_configure_rmm(${SRF_RAPIDS_VERSION})
+find_and_configure_protobuf(${PROTOBUF_VERSION})

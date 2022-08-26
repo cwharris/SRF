@@ -15,26 +15,23 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_rxcpp version)
+function(find_and_configure_nlohmann_json version)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
-  rapids_cpm_find(rxcpp ${version}
+  rapids_cpm_find(nlohmann_json ${version}
     GLOBAL_TARGETS
-      rxcpp rxcpp::rxcpp
+      nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/mdemoret-nv/RxCpp.git # TODO(MDD): Move RxCpp fork to nv-morpheus
-      GIT_TAG         v${version}
-      GIT_SHALLOW     TRUE
-      OPTIONS         "RX_BUILD_TESTING OFF"
-                      "RX_BUILD_EXAMPLES OFF"
-                      "RXCPP_USE_FIBERS ON"
+      GIT_REPOSITORY          https://github.com/nlohmann/json.git
+      GIT_TAG                 v${version}
+      GIT_SHALLOW             TRUE
   )
 
 endfunction()
 
-find_and_configure_rxcpp("4.1.1.2")
+find_and_configure_nlohmann_json("3.9.1")

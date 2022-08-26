@@ -43,7 +43,7 @@ function(find_and_configure_prometheus_cpp version)
 
 endfunction()
 
-find_and_configure_prometheus_cpp(${PROMETHEUS_CPP_VERSION})
+find_and_configure_prometheus_cpp("1.0.0")
 ## Manually export prometheus-core. Use this if we don't want to apply the export fix patch.
 #add_library(prometheus-cpp-core STATIC IMPORTED)
 #set_property(TARGET prometheus-cpp-core PROPERTY
