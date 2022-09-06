@@ -95,8 +95,8 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
 # Setup cache before dependencies
 include(cmake/setup_cache.cmake)
@@ -281,12 +281,7 @@ target_link_libraries(libsrf
   prometheus-cpp::core # private in MR !199
   ucx::ucs
   ucx::ucp
-  -L/home/charris/dev/doca-testing/dpdk-doca-gpu/install/lib/x86_64-linux-gnu
-  -L/home/charris/dev/doca-testing/doca/install/lib/x86_64-linux-gnu
-  doca_common.so
-  doca_flow.so
-  doca_gpu.so
-  doca_argp.so
+  nlohmann_json::nlohmann_json
 )
 
 target_include_directories(libsrf

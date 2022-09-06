@@ -17,12 +17,13 @@
 
 #include "srf/core/logging.hpp"
 
+#include <gflags/gflags.h>
 #include <gtest/gtest.h>
 
 int main(int argc, char** argv)
 {
     srf::init_logging("srf::test_srf_benchmarking");
     ::testing::InitGoogleTest(&argc, argv);
-    ::google::ParseCommandLineFlags(&argc, &argv, true);
+    // ::google::ParseCommandLineFlags(&argc, &argv, true);
     return RUN_ALL_TESTS();
 }

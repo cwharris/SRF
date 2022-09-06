@@ -50,10 +50,12 @@ static auto make_resources(std::function<void(Options&)> updater = nullptr)
 
 struct doca_context
 {
+private:
+  doca_gpu* _gpu;
+
+public:
   doca_context(std::string nic_addr, std::string gpu_addr)
   {
-    std::cout << "ctor rte_eacl_context()" << std::endl;
-
     char* nic_addr_c = new char[nic_addr.size() + 1];
     char* gpu_addr_c = new char[gpu_addr.size() + 1];
 
@@ -77,33 +79,34 @@ struct doca_context
     argv.push_back(l_arg);
 
     auto eal_ret = rte_eal_init(argv.size(), argv.data());
-
-    delete[] nic_addr_c;
-    delete[] gpu_addr_c;
-
     if (eal_ret < 0) {
       throw std::runtime_error("EAL initialization failed, error=" + std::to_string(eal_ret));
     }
 
-    doca_gpu* gpu;
-    auto doca_ret = doca_gpu_create(gpu_addr_c, &gpu);
-
+    auto doca_ret = doca_gpu_create(gpu_addr_c, &_gpu);
     if (doca_ret != DOCA_SUCCESS) {
       throw std::runtime_error("DOCA initialization failed, error=" + std::to_string(doca_ret));
     }
 
-    
+    auto gpu_attack_dpdk_ret = doca_gpu_to_dpdk(_gpu);
+    if (gpu_attack_dpdk_ret != DOCA_SUCCESS) {
+      throw std::runtime_error("DOCA to DPDK attach failed, error=" + std::to_string(gpu_attack_dpdk_ret));
+    }
+
+    delete[] nic_addr_c;
+    delete[] gpu_addr_c;
   }
 
   ~doca_context()
   {
-    std::cout << "dtor rte_eacl_context()" << std::endl;
+    auto eal_ret = rte_eal_cleanup();
+    if (eal_ret < 0) {
+      std::cout << "WARNING: EAL cleanup failed (" << eal_ret << ")" << std::endl;
+    }
 
-    auto ret = rte_eal_cleanup();
-
-    if (ret < 0) {
-      // log the fact that cleanup didn't work and move on.
-        // throw std::runtime_error("rte eal cleanup failed, error=" + std::to_string(ret));
+    auto doca_ret = doca_gpu_destroy(&_gpu);
+    if (doca_ret != DOCA_SUCCESS) {
+      std::cout << "WARNING: DOCA cleanup failed (" << doca_ret << ")" << std::endl;
     }
   }
 };
@@ -120,5 +123,5 @@ TEST_F(TestDOCA, Version)
 
 TEST_F(TestDOCA, SetupAndTeardown)
 {
-  std::make_shared<doca_context>("b6:00.0", "b5:00.0");
+  std::make_shared<doca_context>("b5:00.0", "b6:00.0");
 }

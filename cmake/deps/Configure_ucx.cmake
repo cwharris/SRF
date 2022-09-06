@@ -67,10 +67,14 @@ function(find_and_configure_ucx version)
       "NM=${CMAKE_NM}"
       "STRIP=${CMAKE_STRIP}"
       "CFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}}"
-      "CPPFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}}"
+      "CPPFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}} -fPIC"
       "CXXFLAGS=${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${BUILD_TYPE_UC}}"
       "LDFLAGS=${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS_${BUILD_TYPE_UC}}"
     )
+
+    message(STATUS "ucx_DEST_DIR: ${ucx_DEST_DIR}")
+    message(STATUS "ucx_INSTALL_DIR: ${ucx_INSTALL_DIR}")
+    message(STATUS "ucx CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 
     # Use BUILD_IN_SOURCE because UCX cant do out of source builds and CMake sucks at change directory
     ExternalProject_Add(ucx
@@ -82,7 +86,7 @@ function(find_and_configure_ucx version)
       # The io_demo fails to build in out of source builds. So remove that from
       # the Makefile (wish we could just disable all test/examples/apps) as a
       # part of the download command
-      PATCH_COMMAND     git checkout -- . && git apply --whitespace=fix ${PROJECT_SOURCE_DIR}/cmake/deps/patches/ucx.patch
+    #   PATCH_COMMAND     git checkout -- . && git apply --whitespace=fix ${PROJECT_SOURCE_DIR}/cmake/deps/patches/ucx.patch
       # Note, we set SED and GREP here since they can be hard coded in the conda libtoolize
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env SED=sed GREP=grep <SOURCE_DIR>/autogen.sh
                 COMMAND <SOURCE_DIR>/contrib/configure-release ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX} --enable-mt --without-rdmacm --disable-gtest --disable-examples

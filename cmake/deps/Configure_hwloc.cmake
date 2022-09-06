@@ -17,7 +17,7 @@
 
 find_package(CUDAToolkit)
 
-function(find_and_configure_hwloc version)
+function(find_and_configure_hwloc VERSION GIT_TAG)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "hwloc")
 
@@ -37,7 +37,7 @@ function(find_and_configure_hwloc version)
 
   find_package(PkgConfig)
 
-  pkg_check_modules(hwloc IMPORTED_TARGET GLOBAL hwloc)
+  pkg_check_modules(hwloc IMPORTED_TARGET GLOBAL hwloc>=${VERSION})
 
   if (hwloc_FOUND)
 
@@ -61,7 +61,7 @@ function(find_and_configure_hwloc version)
   else()
 
     # Try to find hwloc and download from source if not found
-    rapids_cpm_find(hwloc ${version}
+    rapids_cpm_find(hwloc ${VERSION}
       GLOBAL_TARGETS
         hwloc hwloc::hwloc
       BUILD_EXPORT_SET
@@ -70,7 +70,7 @@ function(find_and_configure_hwloc version)
         ${PROJECT_NAME}-core-exports
       CPM_ARGS
         GIT_REPOSITORY          https://github.com/open-mpi/hwloc.git
-        GIT_TAG                 "hwloc-${version}"
+        GIT_TAG                 "${GIT_TAG}"
         DOWNLOAD_ONLY           TRUE
         FIND_PACKAGE_ARGUMENTS  "EXACT"
     )
@@ -101,9 +101,20 @@ function(find_and_configure_hwloc version)
         "NM=${CMAKE_NM}"
         "STRIP=${CMAKE_STRIP}"
         "CFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}}"
-        "CPPFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}} -I${CUDAToolkit_INCLUDE_DIRS}" # Add CUDAToolkit here
+        "CPPFLAGS=${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UC}} -fPIC -I${CUDAToolkit_INCLUDE_DIRS}" # Add CUDAToolkit here
         "CXXFLAGS=${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${BUILD_TYPE_UC}}"
         "LDFLAGS=${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS_${BUILD_TYPE_UC}}"
+      )
+
+      message(STATUS "COMPILER_SETTINGS: ${COMPILER_SETTINGS}")
+
+      set(HWLOC_DISABLES
+        "--disable-cairo"
+        "--disable-opencl"
+        "--disable-cuda"
+        "--disable-nvml"
+        "--disable-gl"
+        "--disable-libudev"
       )
 
       ExternalProject_Add(hwloc
@@ -114,7 +125,7 @@ function(find_and_configure_hwloc version)
         DOWNLOAD_COMMAND  ${CMAKE_COMMAND} -E copy_directory ${hwloc_SOURCE_DIR} ${hwloc_BINARY_DIR}
         # Note, we set SED and GREP here since they can be hard coded in the conda libtoolize
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env SED=sed GREP=grep <SOURCE_DIR>/autogen.sh
-                  COMMAND <SOURCE_DIR>/configure ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX} --enable-plugins=linux,x86,nvml,pcie,xml --enable-static
+                  COMMAND <SOURCE_DIR>/configure ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX} --enable-plugins=linux,x86,nvml,pcie,xml --enable-static ${HWLOC_DISABLES}
         BUILD_COMMAND     make -j
         BUILD_IN_SOURCE   TRUE
         BUILD_BYPRODUCTS  <INSTALL_DIR>/lib/libhwloc.a
@@ -158,4 +169,4 @@ function(find_and_configure_hwloc version)
 
 endfunction()
 
-find_and_configure_hwloc(${HWLOC_VERSION})
+find_and_configure_hwloc("2.5" "hwloc-2.5.0")

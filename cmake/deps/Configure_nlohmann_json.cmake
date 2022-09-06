@@ -15,11 +15,11 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_nlohmann_json version)
+function(find_and_configure_nlohmann_json VERSION)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
-  rapids_cpm_find(nlohmann_json ${version}
+  rapids_cpm_find(nlohmann_json ${VERSION}
     GLOBAL_TARGETS
       nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
@@ -28,10 +28,18 @@ function(find_and_configure_nlohmann_json version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/nlohmann/json.git
-      GIT_TAG                 v${version}
+      GIT_TAG                 ${GIT_TAG}
       GIT_SHALLOW             TRUE
+      OPTIONS                 "JSON_Install ON"
   )
+
+  if (nlohmann_json_ADDED)
+    target_include_directories(nlohmann_json
+        INTERFACE $<BUILD_INTERFACE:${nlohmann_json_SOURCE_DIR}/include>
+                  $<BUILD_INTERFACE:${nlohmann_json_BINARY_DIR}/include>
+    )
+  endif()
 
 endfunction()
 
-find_and_configure_nlohmann_json(${JSON_VERSION})
+find_and_configure_nlohmann_json("3.9.1" "v3.9.1")

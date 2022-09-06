@@ -26,6 +26,7 @@ target_link_libraries(test_srf_benchmarking
     ${PROJECT_NAME}::libsrf
     GTest::gtest
     prometheus-cpp::core
+    nlohmann_json::nlohmann_json
 )
 
 add_test(

@@ -40,6 +40,8 @@ if (COMPILER_CXX_HAS_O0)
   set(CMAKE_CUDA_FLAGS_DEBUG "${CMAKE_CUDA_FLAGS_DEBUG} -O0")
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
 ####################################
 # - Compiler Checks ----------------
 

@@ -75,7 +75,6 @@ include(deps/Configure_ucx)
 
 # hwloc
 # =====
-set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
 include(deps/Configure_hwloc)
 
 # FlatBuffers
@@ -93,24 +92,11 @@ include(deps/Configure_hwloc)
 set(RMM_VERSION "\${SRF_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use. Defaults to \${SRF_RAPIDS_VERSION}")
 include(deps/Configure_RMM)
 
-# gflags
-# ======
-rapids_find_package(gflags REQUIRED
-  GLOBAL_TARGETS gflags
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  # FIND_ARGS
-  #   CONFIG
-)
-
 # abseil
 include(deps/Configure_abseil)
 
 # glog
 # ====
-# - link against shared
-# - todo: compile with -DWITH_GFLAGS=OFF and remove gflags dependency
-set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
 include(deps/Configure_glog)
 
 
@@ -123,7 +109,6 @@ find_path(CUB_INCLUDE_DIRS "cub/cub.cuh"
 
 # grpc-repo
 # =========
-set(GRPC_VERSION "1.45.1" CACHE STRING "Version of gRPC to use")
 include(deps/Configure_gRPC)
 
 # RxCpp
@@ -133,7 +118,6 @@ include(deps/Configure_rxcpp)
 
 # JSON
 # ======
-set(JSON_VERSION "3.9.1" CACHE STRING "Version of nlohmann_json to use")
 include(deps/Configure_nlohmann_json)
 
 # prometheus
@@ -159,15 +143,9 @@ if(SRF_BUILD_BENCHMARKS)
 endif()
 
 if(SRF_BUILD_TESTS)
-  # google test
-  # ===========
-  rapids_find_package(GTest REQUIRED
-    GLOBAL_TARGETS GTest::gtest GTest::gmock GTest::gtest_main GTest::gmock_main
-    BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-    # No install set
-    FIND_ARGS
-    CONFIG
-  )
+
+    include(deps/Configure_GTest)
+  
 endif()
 
 list(POP_BACK CMAKE_MESSAGE_CONTEXT)

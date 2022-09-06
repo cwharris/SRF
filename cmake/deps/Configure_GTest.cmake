@@ -15,27 +15,24 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_glog VERSION GIT_TAG)
+function(find_and_configure_gtest VERSION GIT_TAG)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
-  rapids_cpm_find(glog ${VERSION}
+  rapids_cpm_find(GTest ${VERSION}
     GLOBAL_TARGETS
-      glog glog::glog
+        GTest::gtest GTest::gmock GTest::gtest_main GTest::gmock_main
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+        ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+        ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY          https://github.com/google/glog.git
-      GIT_TAG                 ${GIT_TAG}
-      GIT_SHALLOW             TRUE
-      OPTIONS                 "WITH_CUSTOM_PREFIX ON"
-                              "WITH_PKGCONFIG OFF"
-                              "BUILD_TESTING OFF"
-                              "WITH_GFLAGS OFF"
+        GIT_REPOSITORY          https://github.com/google/googletest
+        GIT_TAG                 ${GIT_TAG}
+        GIT_SHALLOW             TRUE
+        OPTIONS                 "INSTALL_GTEST ON"
   )
 
 endfunction()
 
-find_and_configure_glog("0.6" "v0.6.0")
+find_and_configure_gtest("0.12" "v1.12.0")

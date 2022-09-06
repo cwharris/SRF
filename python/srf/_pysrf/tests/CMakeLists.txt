@@ -37,6 +37,7 @@ target_link_libraries(test_pysrf
     glog::glog
     GTest::gtest
     pybind11::embed
+    nlohmann_json::nlohmann_json
 )
 
 add_test(

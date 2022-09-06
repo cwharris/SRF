@@ -102,6 +102,8 @@ function(protobuf_generate_grpc_cpp target)
   target_link_libraries(${target}
     PUBLIC
       protobuf::libprotobuf
+      gRPC::grpc
+      gRPC::grpc++
   )
 
   target_include_directories(${target}

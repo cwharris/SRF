@@ -21,60 +21,55 @@ function(find_and_configure_gRPC version)
 
   rapids_cpm_find(gRPC ${version}
     GLOBAL_TARGETS
-    #   gRPC::address_sorting
-    #   gRPC::gpr
+      gpr gRPC::gpr
       grpc gRPC::grpc
       grpc_cpp_plugin gRPC::grpc_cpp_plugin
-    #   gRPC::grpc_csharp_plugin
-    #   gRPC::grpc_node_plugin
-    #   gRPC::grpc_objective_c_plugin
-    #   gRPC::grpc_php_plugin
-    #   gRPC::grpc_plugin_support
-    #   gRPC::grpc_python_plugin
-    #   gRPC::grpc_ruby_plugin
-    #   gRPC::grpc_unsecure
-    #   gRPC::grpc++
-    #   gRPC::grpc++_alts
-    #   gRPC::grpc++_error_details
-    #   gRPC::grpc++_reflection
-    #   gRPC::grpc++_unsecure
-    #   gRPC::grpcpp_channelz
-    #   gRPC::upb
+      grpc++ gRPC::grpc++
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/grpc/grpc.git
-      GIT_TAG         v${version}
-      GIT_SHALLOW     TRUE
-      OPTIONS         "BUILD_TESTS OFF"
-                      "BUILD_BENCHMARKS OFF"
-                      "CUDA_STATIC_RUNTIME ON"
-                      "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
-                      "gRPC_BUILD_CODEGEN ON"
-                      "gRPC_BUILD_GRPC_CPP_PLUGIN ON"
-                      "gRPC_INSTALL ON"
-                      "gRPC_ABSL_PROVIDER package"
+      GIT_REPOSITORY            https://github.com/grpc/grpc.git
+      GIT_TAG                   v${version}
+      GIT_SHALLOW               TRUE
+      GIT_SUBMODULES_RECURSE    ON
+      OPTIONS                   "gRPC_BUILD_TESTS OFF"
+                                "BUILD_BENCHMARKS OFF"
+                                "CUDA_STATIC_RUNTIME ON"
+                                "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
+                                "gRPC_BUILD_CODEGEN ON"
+                                "gRPC_BUILD_GRPC_CPP_PLUGIN ON"
+                                "gRPC_INSTALL ON"
+                                "gRPC_ABSL_PROVIDER package"
+                                "gRPC_PROTOBUF_PROVIDER package"
+                                "gRPC_BUILD_GRPC_CSHARP_PLUGIN OFF"
+                                "gRPC_BUILD_GRPC_NODE_PLUGIN OFF"
+                                "gRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN OFF"
+                                "gRPC_BUILD_GRPC_PHP_PLUGIN OFF"
+                                "gRPC_BUILD_GRPC_PYTHON_PLUGIN OFF"
+                                "gRPC_BUILD_GRPC_RUBY_PLUGIN OFF"
   )
 
   if (gRPC_ADDED)
-
-    # install(TARGETS grpc
-    #         EXPORT  grpc-exports)
-
-    # generate grpc-targets.cmake for binary dir
     rapids_export(BUILD grpc
                   EXPORT_SET gRPCTargets
                   GLOBAL_TARGETS
                     grpc
                     grpc_cpp_plugin
                   NAMESPACE gRPC::)
+  endif()
 
+  if(TARGET gpr AND NOT TARGET gRPC::gpr)
+    add_library(gRPC::gpr ALIAS gpr)
   endif()
 
   if(TARGET grpc AND NOT TARGET gRPC::grpc)
     add_library(gRPC::grpc ALIAS grpc)
+  endif()
+
+  if(TARGET grpc++ AND NOT TARGET gRPC::grpc++)
+    add_library(gRPC::grpc++ ALIAS grpc++)
   endif()
 
   if(TARGET grpc_cpp_plugin AND NOT TARGET gRPC::grpc_cpp_plugin)
@@ -83,20 +78,9 @@ function(find_and_configure_gRPC version)
 
   rapids_export_package(BUILD gRPC ${PROJECT_NAME}-core-exports)
 
-
   include("${rapids-cmake-dir}/export/find_package_root.cmake")
   rapids_export_find_package_root(BUILD gRPC [=[${CMAKE_CURRENT_LIST_DIR}]=] ${PROJECT_NAME}-core_exports)
 
 endfunction()
 
-find_and_configure_gRPC(${GRPC_VERSION})
-
-
-# rapids_find_package(gRPC REQUIRED
-#   GLOBAL_TARGETS
-#     gRPC::address_sorting gRPC::gpr gRPC::grpc gRPC::grpc_unsecure gRPC::grpc++ gRPC::grpc++_alts gRPC::grpc++_error_details gRPC::grpc++_reflection
-#     gRPC::grpc++_unsecure gRPC::grpc_plugin_support gRPC::grpcpp_channelz gRPC::upb gRPC::grpc_cpp_plugin gRPC::grpc_csharp_plugin gRPC::grpc_node_plugin
-#     gRPC::grpc_objective_c_plugin gRPC::grpc_php_plugin gRPC::grpc_python_plugin gRPC::grpc_ruby_plugin
-#   BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-#   INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-# )
+find_and_configure_gRPC("1.48.0")

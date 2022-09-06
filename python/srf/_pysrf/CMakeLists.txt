@@ -45,6 +45,7 @@ target_link_libraries(pysrf
     ${Python_LIBRARIES}
     prometheus-cpp::core
     pybind11::pybind11
+    nlohmann_json::nlohmann_json
   )
 
 target_include_directories(pysrf

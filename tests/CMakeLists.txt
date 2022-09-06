@@ -31,6 +31,7 @@ target_link_libraries(test_srf
   PRIVATE
     ${PROJECT_NAME}::libsrf
     GTest::gtest
+    nlohmann_json::nlohmann_json
 )
 
 add_test(
