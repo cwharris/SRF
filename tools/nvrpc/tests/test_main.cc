@@ -17,7 +17,7 @@
 
 #include "srf/core/logging.hpp"
 
-#include <gflags/gflags.h>  // for ParseCommandLineFlags
+// #include <gflags/gflags.h>  // for ParseCommandLineFlags
 #include <gtest/gtest.h>
 
 int main(int argc, char** argv)

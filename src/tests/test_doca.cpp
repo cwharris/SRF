@@ -123,5 +123,5 @@ TEST_F(TestDOCA, Version)
 
 TEST_F(TestDOCA, SetupAndTeardown)
 {
-  std::make_shared<doca_context>("b5:00.0", "b6:00.0");
+  std::make_shared<doca_context>("b5:00.0", "61:00.0");
 }
