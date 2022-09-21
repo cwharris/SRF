@@ -69,31 +69,6 @@ target_link_libraries(test_srf_private
   ucx::ucp
   pthread
   nlohmann_json::nlohmann_json
-  -L/home/charris/dev/doca-testing/doca/install/lib/x86_64-linux-gnu
-  -L/home/charris/dev/doca-testing/dpdk-doca-gpu/install/lib/x86_64-linux-gnu
-  libdoca_argp.so
-  libdoca_common.so
-  libdoca_flow.so
-  libdoca_gpu.so
-  librte_bus_auxiliary.so
-  librte_bus_pci.so
-  librte_bus_vdev.so
-  librte_common_mlx5.so
-  librte_eal.so
-  librte_ethdev.so
-  librte_gpudev.so
-  librte_hash.so
-  librte_ip_frag.so
-  librte_kvargs.so
-  librte_mbuf.so
-  librte_mempool.so
-  librte_meter.so
-  librte_net_mlx5.so
-  librte_net.so
-  librte_pci.so
-  librte_rcu.so
-  librte_ring.so
-  librte_telemetry.so
 )
 
 # Necessary include to prevent IWYU from showing absolute paths
@@ -102,6 +77,8 @@ target_include_directories(test_srf_private
   ${SRF_ROOT_DIR}/src
   copy_fixture_files
   /usr/include
+  /home/charris/dev/doca-testing/dpdk-doca-gpu/install/include
+  /home/charris/dev/doca-testing/doca/install/include
 )
 
 add_test(

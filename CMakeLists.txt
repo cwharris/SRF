@@ -152,6 +152,7 @@ add_library(libsrf
   src/internal/data_plane/resources.cpp
   src/internal/data_plane/request.cpp
   src/internal/data_plane/server.cpp
+  src/internal/doca/doca_context.cpp
   src/internal/executor/executor.cpp
   src/internal/executor/iexecutor.cpp
   src/internal/memory/device_resources.cpp
@@ -274,6 +275,30 @@ target_link_libraries(libsrf
   rxcpp::rxcpp
   glog::glog
   libcudacxx::libcudacxx
+  -L/home/charris/dev/doca-testing/doca/install/lib/x86_64-linux-gnu
+  -L/home/charris/dev/doca-testing/dpdk-doca-gpu/install/lib/x86_64-linux-gnu
+  libdoca_argp.so
+  libdoca_common.so
+  libdoca_gpu.so
+  librte_bus_auxiliary.so
+  librte_bus_pci.so
+  librte_bus_vdev.so
+  librte_common_mlx5.so
+  librte_eal.so
+  librte_ethdev.so
+  librte_gpudev.so
+  librte_hash.so
+  librte_ip_frag.so
+  librte_kvargs.so
+  librte_mbuf.so
+  librte_mempool.so
+  librte_meter.so
+  librte_net_mlx5.so
+  librte_net.so
+  librte_pci.so
+  librte_rcu.so
+  librte_ring.so
+  librte_telemetry.so
   PRIVATE
   nvrpc
   nvrpc-client
