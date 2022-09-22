@@ -153,6 +153,11 @@ add_library(libsrf
   src/internal/data_plane/request.cpp
   src/internal/data_plane/server.cpp
   src/internal/doca/doca_context.cpp
+  src/internal/doca/dpdk_utils.c
+  src/internal/doca/flows.c
+  src/internal/doca/gpu_init.c
+  src/internal/doca/offload_rules.c
+  src/internal/doca/utils.c
   src/internal/executor/executor.cpp
   src/internal/executor/iexecutor.cpp
   src/internal/memory/device_resources.cpp
@@ -280,6 +285,7 @@ target_link_libraries(libsrf
   libdoca_argp.so
   libdoca_common.so
   libdoca_gpu.so
+  libdoca_flow.so
   librte_bus_auxiliary.so
   librte_bus_pci.so
   librte_bus_vdev.so

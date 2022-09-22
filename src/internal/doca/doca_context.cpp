@@ -1,4 +1,5 @@
 #include "internal/doca/doca_context.hpp"
+#include "common.h"
 
 #include <rte_eal.h>
 #include <doca_version.h>
@@ -24,6 +25,9 @@ doca_context::doca_context(std::string nic_addr, std::string gpu_addr)
 
     auto argv = std::vector<char*>();
 
+    char program[] = "not a real program path";
+    argv.push_back(program);
+
     char a_flag[] = "-a";
     argv.push_back(a_flag);
     argv.push_back(nic_addr_c);
@@ -43,6 +47,22 @@ doca_context::doca_context(std::string nic_addr, std::string gpu_addr)
     auto doca_ret = doca_gpu_create(gpu_addr_c, &_gpu);
     if (doca_ret != DOCA_SUCCESS) {
       throw std::runtime_error("DOCA initialization failed, error=" + std::to_string(doca_ret));
+    }
+
+    auto dpdk_config = [](){
+      application_dpdk_config dpdk_config;
+      dpdk_config.port_config.nb_ports = 1;
+      dpdk_config.port_config.nb_queues = 0;
+      dpdk_config.port_config.nb_hairpin_q = 0;
+      dpdk_config.reserve_main_thread = true;
+      return dpdk_config;
+    }();
+
+    uint8_t app_cfg_nic_port = 0;
+    uint8_t app_cfg_queue_num = 1;
+    auto df_port = init_doca_flow(app_cfg_nic_port, app_cfg_queue_num, &dpdk_config);
+    if (df_port == nullptr) {
+      throw std::runtime_error("DOCA Flow initialization failed");
     }
 
     auto gpu_attack_dpdk_ret = doca_gpu_to_dpdk(_gpu);
