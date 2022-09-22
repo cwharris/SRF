@@ -65,7 +65,7 @@ rapids_find_package(CUDAToolkit
 # =====
 # - Use static linking to avoid issues with system-wide installations of Boost.
 # - Use numa=on to ensure the numa component of fiber gets built
-set(BOOST_VERSION "1.80.0" CACHE STRING "Version of boost to use")
+set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 include(deps/Configure_boost)
 
 # UCX
