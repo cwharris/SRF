@@ -33,7 +33,7 @@ option(SRF_USE_CONDA "Enables finding dependencies via conda instead of vcpkg. N
 option(SRF_USE_IWYU "Enable running include-what-you-use as part of the build process" OFF)
 option(SRF_ENABLE_CODECOV "Enable gcov code coverage" OFF)
 
-set(SRF_RAPIDS_VERSION "22.08" CACHE STRING "Which version of RAPIDS to build for. Sets default versions for RAPIDS CMake and RMM.")
+set(SRF_RAPIDS_VERSION "22.10" CACHE STRING "Which version of RAPIDS to build for. Sets default versions for RAPIDS CMake and RMM.")
 
 set(SRF_CACHE_DIR "${CMAKE_SOURCE_DIR}/.cache" CACHE PATH "Directory to contain all CPM and CCache data")
 mark_as_advanced(SRF_CACHE_DIR)

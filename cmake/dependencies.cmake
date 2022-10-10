@@ -130,13 +130,7 @@ include(deps/Configure_rxcpp)
 
 # JSON
 # ======
-rapids_find_package(nlohmann_json REQUIRED
-  GLOBAL_TARGETS nlohmann_json::nlohmann_json
-  BUILD_EXPORT_SET ${PROJECT_NAME}-core-exports
-  INSTALL_EXPORT_SET ${PROJECT_NAME}-core-exports
-  FIND_ARGS
-    CONFIG
-)
+include(deps/Configure_nlohmann_json)
 
 # prometheus
 # =========

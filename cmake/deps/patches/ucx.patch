@@ -33,3 +33,4 @@ index 073ead3..85f9d01 100644
  if HAVE_GTEST
  SUBDIRS += test/gtest
  endif
+z
