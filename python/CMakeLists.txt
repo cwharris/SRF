@@ -19,12 +19,12 @@ find_package(CUDAToolkit REQUIRED)
 
 
 # Ensure python is configured
-morpheus_utils_python_ensure_loaded()
-
+morpheus_utils_python_ensure_python3()
 
 morpheus_utils_print_python_info()
 
 # Create the mrc python package
+morpheus_utils_python_configure()
 morpheus_utils_create_python_package(mrc)
 
 # Add a few additional files to be copied
