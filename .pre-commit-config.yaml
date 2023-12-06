@@ -15,8 +15,6 @@ repos:
         hooks:
               - id: black
                 files: python/.*
-                # Explicitly specify the pyproject.toml at the repo root, not per-project.
-                args: ["--config", "pyproject.toml"]
       - repo: https://github.com/rapidsai/dependency-file-generator
         rev: v1.7.1
         hooks:
@@ -28,6 +26,32 @@ repos:
               - id: clang-format
                 types_or: [c, c++, cuda]
                 args: ["-fallback-style=none", "-style=file", "-i"]
+      - repo: local
+        hooks:
+              - id: include-what-you-use
+                name: include-what-you-use
+                description: runs include-what-you-use
+                entry: ./cpp/scripts/run-iwyu.sh
+                language: system
+                pass_filenames: true
+                files: ^cpp/mrc/.*
+                types_or: [file]
+
+      # - repo: https://github.com/pocc/pre-commit-hooks
+      #   rev: v1.3.5
+      #   hooks:
+      #         - id: clang-format
+      #         # - id: clang-tidy
+      #         - id: include-what-you-use
+      #           args: [
+      #             "-Xiwyu", "--mapping_file=ci/iwyu/mappings.imp",
+      #             "-Xiwyu", "--verbose=3",
+      #             "-Xiwyu", "--quoted_includes_first",
+      #             "-Xiwyu", "--quoted_includes_first",
+      #             "-Xiwyu", "--cxx17ns",
+      #             "-Xiwyu", "--error=1",
+      #             "--driver-mode=g++"
+      #           ]
 
 default_language_version:
       python: python3
