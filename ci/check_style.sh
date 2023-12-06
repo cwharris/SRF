@@ -1,5 +1,18 @@
 #!/bin/bash
-# Copyright (c) 2020-2023, NVIDIA CORPORATION.
+# SPDX-FileCopyrightText: Copyright (c) 2021-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 set -euo pipefail
 
@@ -13,11 +26,6 @@ rapids-dependency-file-generator \
 
 rapids-mamba-retry env create --force -f env.yaml -n checks
 conda activate checks
-
-FORMAT_FILE_URL=https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-24.02/cmake-format-rapids-cmake.json
-export RAPIDS_CMAKE_FORMAT_FILE=/tmp/rapids_cmake_ci/cmake-formats-rapids-cmake.json
-mkdir -p $(dirname ${RAPIDS_CMAKE_FORMAT_FILE})
-wget -O ${RAPIDS_CMAKE_FORMAT_FILE} ${FORMAT_FILE_URL}
 
 # Run pre-commit checks
 pre-commit run --all-files --show-diff-on-failure
