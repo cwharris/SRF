@@ -28,30 +28,14 @@ repos:
                 args: ["-fallback-style=none", "-style=file", "-i"]
       - repo: local
         hooks:
-              - id: include-what-you-use
-                name: include-what-you-use
-                description: runs include-what-you-use
+              - id: iwyu
+                name: iwyu
+                description: runs iwyu
                 entry: ./cpp/scripts/run-iwyu.sh
                 language: system
                 pass_filenames: true
                 files: ^cpp/mrc/.*
                 types_or: [file]
-
-      # - repo: https://github.com/pocc/pre-commit-hooks
-      #   rev: v1.3.5
-      #   hooks:
-      #         - id: clang-format
-      #         # - id: clang-tidy
-      #         - id: include-what-you-use
-      #           args: [
-      #             "-Xiwyu", "--mapping_file=ci/iwyu/mappings.imp",
-      #             "-Xiwyu", "--verbose=3",
-      #             "-Xiwyu", "--quoted_includes_first",
-      #             "-Xiwyu", "--quoted_includes_first",
-      #             "-Xiwyu", "--cxx17ns",
-      #             "-Xiwyu", "--error=1",
-      #             "--driver-mode=g++"
-      #           ]
 
 default_language_version:
       python: python3

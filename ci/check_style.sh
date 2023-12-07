@@ -28,4 +28,5 @@ rapids-mamba-retry env create --force -f env.yaml -n checks
 conda activate checks
 
 # Run pre-commit checks
-pre-commit run --all-files --show-diff-on-failure
+# need to sip iwyu here, since it relies on build artifacts (compile_commands.json)
+SKIP=iwyu pre-commit run --all-files --show-diff-on-failure
