@@ -217,9 +217,18 @@ py::object Awaitable::next()
 
     std::jthread([this, py_future]() {
         using namespace std::chrono_literals;
-        std::cout << "sleeping" << std::endl;
-        std::this_thread::sleep_for(0ms);
-        std::cout << "sleeping done" << std::endl;
+        std::this_thread::sleep_for(1ms); // using yield or 0ms causes a crash, so this is probably not safe.
+
+        // This doesn't progress the fiber:
+        // while (true)
+        // {
+        //     auto status = this->m_future.wait_for(std::chrono::milliseconds(0));
+
+        //     if (status == boost::fibers::future_status::ready)
+        //     {
+        //         break;
+        //     }
+        // }
 
         py::gil_scoped_acquire gil;
 
