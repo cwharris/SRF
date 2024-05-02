@@ -49,7 +49,7 @@ class Awaitable : public std::enable_shared_from_this<Awaitable>
 
     std::shared_ptr<Awaitable> await();
 
-    void next();
+    pybind11::object next();
 
   private:
     Future<pybind11::object> m_future;

@@ -189,7 +189,7 @@ std::shared_ptr<Awaitable> Awaitable::await()
     return this->shared_from_this();
 }
 
-void Awaitable::next()
+py::object Awaitable::next()
 {
     // Need to release the GIL before  waiting
     py::gil_scoped_release nogil;
@@ -207,6 +207,30 @@ void Awaitable::next()
 
         throw exception;
     }
+
+    auto py_future = []() {
+        py::gil_scoped_acquire gil;
+        auto future = py::module_::import("asyncio").attr("Future")();
+        py::setattr(future, "_asyncio_future_blocking", py::bool_(true));
+        return future;
+    }();
+
+    std::jthread([this, py_future]() {
+        using namespace std::chrono_literals;
+        std::cout << "sleeping" << std::endl;
+        std::this_thread::sleep_for(0ms);
+        std::cout << "sleeping done" << std::endl;
+
+        py::gil_scoped_acquire gil;
+
+        auto loop = py_future.attr("get_loop")();
+
+        loop.attr("call_soon_threadsafe")(py::cpp_function([py_future]() {
+            py_future.attr("set_result")(py::none());
+        }));
+    }).detach();
+
+    return py_future;
 }
 
 /** Executor impls -- move to own file **/
